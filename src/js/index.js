@@ -2,6 +2,9 @@ const funtions={
     init:function () {
         // Agregamos la propiedad scaleMode para que se ajuste al viewport
         juego.scale.scaleMode=Phaser.ScaleManager.SHOW_ALL;
+        //alineamos el juego en elcentro
+        juego.scale.pageAlignHorizontally=true;
+        juego.scale.pageAlignVertically=true;
     },
     preload:function () {
         // agregamos la imagen de fondo usando la propiedad load y el método image
