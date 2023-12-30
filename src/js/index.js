@@ -3,12 +3,13 @@ const funtions={
         console.log("init");
     },
     preload:function () {
-        console.log("preload");
-
+        // agregamos la imagen de fondo usando la propiedad load y el método image
+        // que recibe dos parámetros un alias, y el path donde está la imagen
+        juego.load.image('background','src/assets/images/background.png')
     },
     create:function () {
-        console.log("create");
-        
+        // Mostramos la imagen pasandole tres parámetros coordenada (x , y) y el alias 
+        juego.add.sprite(0,0, 'background');
         
     },
     // es llamado frame a frame
