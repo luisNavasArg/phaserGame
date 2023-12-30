@@ -1,6 +1,7 @@
 const funtions={
     init:function () {
-        console.log("init");
+        // Agregamos la propiedad scaleMode para que se ajuste al viewport
+        juego.scale.scaleMode=Phaser.ScaleManager.SHOW_ALL;
     },
     preload:function () {
         // agregamos la imagen de fondo usando la propiedad load y el método image
