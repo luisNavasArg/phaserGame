@@ -10,11 +10,22 @@ const funtions={
         // agregamos la imagen de fondo usando la propiedad load y el método image
         // que recibe dos parámetros un alias, y el path donde está la imagen
         juego.load.image('background','src/assets/images/background.png')
+        //cargamos nuestro personaje 
+        // pasamos 5 parámetros, alias,path,ancho,alto,cantidad de inagenes
+        juego.load.spritesheet("im", "src/assets/images/horse.png",84,156,2)
     },
     create:function () {
         // Mostramos la imagen pasandole tres parámetros coordenada (x , y) y el alias 
         juego.add.sprite(0,0, 'background');
-        
+        // agregando el personaje
+        this.horse =juego.add.sprite(0,0, 'im');
+        // accediendo a los frames
+        this.horse.frame=1;
+        // centrando el personaje
+        this.horse.x=juego.width/2;
+        this.horse.y = juego.height/2;
+        // centrando el pivot de la imagen
+        this.horse.anchor.setTo(0.5,0.5)
     },
     // es llamado frame a frame
     update:function () {
