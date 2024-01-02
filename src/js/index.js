@@ -26,10 +26,14 @@ const funtions={
         this.horse.y = juego.height/2;
         // centrando el pivot de la imagen
         this.horse.anchor.setTo(0.5,0.5)
+        //el anchor es importante ya que cuando rotamos la imagen lo hace a partir del anchor o pivot
+        // this.horse.angle=90; si lo hacemos dentro del update va a ir rotando dependiendo del valor que vayamos sumando
+        this.horse.scale.setTo(2)//Podemos escalar asignando un solo valo o valor para el ancho y el alto por separado
+        this.horse.alpha=0.5;
     },
     // es llamado frame a frame
     update:function () {
-        console.log("update");
+        this.horse.angle+=1;
         
     }
 };
