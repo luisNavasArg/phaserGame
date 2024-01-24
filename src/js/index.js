@@ -5,6 +5,8 @@ const funtions={
         //alineamos el juego en elcentro
         juego.scale.pageAlignHorizontally=true;
         juego.scale.pageAlignVertically=true;
+        // creamos un flag para el inicio 
+        this.flagFirstMouseDown=false;
     },
     preload:function () {
         // agregamos la imagen de fondo usando la propiedad load y el método image
@@ -30,6 +32,13 @@ const funtions={
         // this.horse.angle=90; si lo hacemos dentro del update va a ir rotando dependiendo del valor que vayamos sumando
         this.horse.scale.setTo(2)//Podemos escalar asignando un solo valo o valor para el ancho y el alto por separado
         this.horse.alpha=0.5;
+        // capturamos el primer click en pantalla
+        juego.input.onDown.add(this.onTap,this);
+        
+    },
+    // creamos la función para el flag
+    onTap:function () {
+        this.flagFirstMouseDown=true;
     },
     // es llamado frame a frame
     update:function () {
@@ -40,7 +49,8 @@ const funtions={
 
     // console.log(pointerX);
     // console.log(pointerY);
-    //calculamos la distancia entyre el cursor y el personaje
+    if (this.flagFirstMouseDown) {
+          //calculamos la distancia entre el cursor y el personaje
     let distX=pointerX-this.horse.x;
     let distY=pointerY-this.horse.y;
     if(distX>0){
@@ -48,6 +58,12 @@ const funtions={
     }else{
         this.horse.scale.setTo(-1,1);
     }
+    // hacemos que se mueva en dirección del cursor
+    this.horse.x+=distX*0.02;
+    this.horse.y+=distY*0.02;
+        
+    }
+  
         
     }
 };
