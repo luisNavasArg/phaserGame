@@ -33,7 +33,21 @@ const funtions={
     },
     // es llamado frame a frame
     update:function () {
-        this.horse.angle+=1;
+        // this.horse.angle+=1;
+        //capturamos el puntero dentro del juego
+    let pointerX=juego.input.x;
+    let pointerY=juego.input.y;
+
+    // console.log(pointerX);
+    // console.log(pointerY);
+    //calculamos la distancia entyre el cursor y el personaje
+    let distX=pointerX-this.horse.x;
+    let distY=pointerY-this.horse.y;
+    if(distX>0){
+        this.horse.scale.setTo(1,1);
+    }else{
+        this.horse.scale.setTo(-1,1);
+    }
         
     }
 };
