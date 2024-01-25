@@ -19,6 +19,8 @@ const funtions={
         juego.load.spritesheet("im", "src/assets/images/horse.png",84,156,2)
         // Cargando los diamantes
         juego.load.spritesheet('diamonds',"src/assets/images/diamonds.png",81,84,4);
+        //cargando la explosión para la animación
+        juego.load.image('explosion',"src/assets/images/explosion.png");
     },
     create:function () {
         // Mostramos la imagen pasandole tres parámetros coordenada (x , y) y el alias 
@@ -58,6 +60,29 @@ const funtions={
                 rectCurrentDiamond = this.getBoundsDiamonds(diamond);
             }
         }
+        //colocando en pantalla la explosion
+        // juego.add.sprite(100,100,'explosion');
+
+        //uso de tween permite animar una imagen le pasamos coordenadas,tiempo y el modo(easing)
+        this.explosion=juego.add.sprite(100,100,'explosion');
+        
+        /*let tween = juego.add.tween(this.explosion);
+        tween.to({x:500,y:100},1500,Phaser.Easing.Linear.None);
+        tween.start();*/
+        //le agregamos el tween a la instancia de explosion
+        this.explosion.tweenScale= juego.add.tween(this.explosion.scale).to(
+            {x:[0.4,0.8,0.4], y:[0.4,0.8,0.4]},600, Phaser.Easing.Exponential.Out,
+            //autostart, delay,repeticiones, si queremos usar el yoyo que vaya y vuelva constantemente
+            false      ,0     ,0           ,false
+        );
+        this.explosion.tweenAlpha= juego.add.tween(this.explosion).to(
+            {alpha:[1,0.6,0]},600, Phaser.Easing.Exponential.Out,
+            false,0,0,false
+        );
+        //agregamos el pivot de la explosión
+        this.explosion.anchor.setTo(0.5,0.5);
+        //lo hacemos invisible al principio
+        this.explosion.visible=false;
         
     },
     // creamos la función para el flag
@@ -91,6 +116,27 @@ const funtions={
         }
         return false;
     },
+    //1.función para dtectar los bordes del personaje
+    getBoundsHorse:function () {
+        //inicial
+        // let x0=this.horse.x - Math.abs(this.horse.width)/2;
+        // let width=Math.abs(this.horse.width);
+        //mejorando la colisión visual
+        let x0=this.horse.x - Math.abs(this.horse.width)/4;
+        let width=Math.abs(this.horse.width)/2;
+        let y0=this.horse.y - this.horse.width/2;
+        let height=this.horse.height;
+        return new Phaser.Rectangle(x0,y0,width,height);
+    },
+    //para ver el rectangulo de la imagen
+    render:function () {
+        // juego.debug.spriteBounds(this.horse);
+        for (let i = 0; i < AMOUNT_DIAMONDS; i++) {
+            // juego.debug.spriteBounds(this.diamonds[i]);
+      
+            
+        }
+    },
     // es llamado frame a frame
     update:function () {
         // this.horse.angle+=1;
@@ -114,7 +160,21 @@ const funtions={
     this.horse.y+=distY*0.02;
         
     }
-  
+    for (let i = 0; i < AMOUNT_DIAMONDS; i++) {
+        let rectHorse=this.getBoundsHorse();
+        let rectDiamond=this.getBoundsDiamonds(this.diamonds[i]);
+        if (this.diamonds[i].visible && this.isRentangleOverLapping(rectHorse,rectDiamond)) {
+            this.diamonds[i].visible=false;
+            //mostramos la explosión
+            this.explosion.visible=true;
+            this.explosion.x=this.diamonds[i].x;
+            this.explosion.y=this.diamonds[i].y;
+            this.explosion.tweenScale.start();
+            this.explosion.tweenAlpha.start();
+
+        }
+        
+    }
         
     }
 };
