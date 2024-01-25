@@ -5,6 +5,8 @@ const funtions={
         juego.scale.pageAlignHorizontally=true;
         juego.scale.pageAlignVertically=true;
         this.flagFirstMouseDown=false;
+        this.amountDiamondsCaught=0;
+        this.endGame=false;
     },
     preload:function () {
         juego.load.image('background','src/assets/images/background.png')
@@ -65,6 +67,26 @@ const funtions={
     increaseScore:function () {
         this.currentscore+=100;
         this.scoreText.text=this.currentscore;
+        this.amountDiamondsCaught+=1;
+        if (this.amountDiamondsCaught>=AMOUNT_DIAMONDS) {
+            this.endGame=true;
+            this.showFinalMessage("¡felicidades ganaste!");
+        }
+    },
+    showFinalMessage:function (msg) {
+        let bgAlpha=juego.add.bitmapData(juego.width,juego.height);
+        bgAlpha.ctx.fillStyle='#000';
+        bgAlpha.ctx.fillRect(0,0,juego.width,juego.height);
+        let bg = juego.add.sprite(0,0,bgAlpha);
+        bg.alpha=0.5;
+        let style={
+            font:'bold 60pt Arial',
+        fill:'#fff',
+        aling:'center'
+        };
+        console.log(juego.width);
+        this.textFinalMessage = juego.add.text(juego.width/2,juego.height/2,msg,style);
+        this.textFinalMessage.anchor.setTo(0.5);
     },
     onTap:function () {
         this.flagFirstMouseDown=true;
@@ -106,7 +128,7 @@ const funtions={
     let pointerX=juego.input.x;
     let pointerY=juego.input.y;
 
-    if (this.flagFirstMouseDown) {
+    if (this.flagFirstMouseDown && !this.endGame) {
   
     let distX=pointerX-this.horse.x;
     let distY=pointerY-this.horse.y;
