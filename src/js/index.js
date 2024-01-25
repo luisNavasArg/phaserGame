@@ -109,7 +109,7 @@ const funtions={
     }else{
         this.horse.scale.setTo(-1,1);
     }
-    // hacemos que se mueva en dirección del cursor
+    // hacemos que se mueva en dirección del cursor 
     this.horse.x+=distX*0.02;
     this.horse.y+=distY*0.02;
         
