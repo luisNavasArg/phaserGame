@@ -1,3 +1,5 @@
+// creamos la contante para el grupo de diamantes
+const AMOUNT_DIAMONDS=30;
 const funtions={
     init:function () {
         // Agregamos la propiedad scaleMode para que se ajuste al viewport
@@ -15,6 +17,8 @@ const funtions={
         //cargamos nuestro personaje 
         // pasamos 5 parámetros, alias,path,ancho,alto,cantidad de inagenes
         juego.load.spritesheet("im", "src/assets/images/horse.png",84,156,2)
+        // Cargando los diamantes
+        juego.load.spritesheet('diamonds',"src/assets/images/diamonds.png",81,84,4);
     },
     create:function () {
         // Mostramos la imagen pasandole tres parámetros coordenada (x , y) y el alias 
@@ -34,11 +38,56 @@ const funtions={
         this.horse.alpha=0.5;
         // capturamos el primer click en pantalla
         juego.input.onDown.add(this.onTap,this);
+
+        // array para los diamantes
+        this.diamonds=[];
+        for (let i = 0; i < AMOUNT_DIAMONDS; i++) {
+            let diamond = juego.add.sprite(100,100,'diamonds');
+            diamond.frame = juego.rnd.integerInRange(0,3);
+            diamond.scale.setTo(0.30+juego.rnd.frac());
+            diamond.anchor.setTo(0.5);
+            diamond.x=juego.rnd.integerInRange(50,1050);
+            diamond.y=juego.rnd.integerInRange(50,600);
+            this.diamonds[i]=diamond;
+            let rectCurrentDiamond=this.getBoundsDiamonds(diamond);
+            while (this.isOverLappingDiamond(i,rectCurrentDiamond)) {
+                diamond.x=juego.rnd.integerInRange(50,1050);
+                diamond.y=juego.rnd.integerInRange(50,600);
+                rectCurrentDiamond = this.getBoundsDiamonds(diamond);
+            }
+        }
         
     },
     // creamos la función para el flag
     onTap:function () {
         this.flagFirstMouseDown=true;
+    },
+    //función para devolver rectangulo de los diamantes
+    getBoundsDiamonds:function (currentDiamond) {
+        return new Phaser.Rectangle(currentDiamond.left,currentDiamond.top,
+            currentDiamond.width,currentDiamond.height);
+    },
+    //funcion para saber si están en la misma coordenada
+    isRentangleOverLapping:function (rect1,rect2) {
+        if (rect1.x>rect2.x+rect2.width || rect2.x>rect1.x+rect1.width) {
+            return false;
+        }   
+        if (rect1.y>rect2.y+rect2.height || rect2.y>rect1.y+rect1.height){
+            return false;
+        } 
+        return true;
+    },
+    // 5.comparar el rectangulo con el anterior para ver si colisionan
+    isOverLappingDiamond:function (index,rect2) {
+        for (let i = 0; i < index; i++) {
+            let rect1=this.getBoundsDiamonds(this.diamonds[i]);
+            if (this.isRentangleOverLapping(rect1,rect2)) {
+                return true
+                
+            }
+            
+        }
+        return false;
     },
     // es llamado frame a frame
     update:function () {
