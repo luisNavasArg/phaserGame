@@ -50,7 +50,9 @@ const funtions={
             diamond.y=juego.rnd.integerInRange(50,600);
             this.diamonds[i]=diamond;
             let rectCurrentDiamond=this.getBoundsDiamonds(diamond);
-            while (this.isOverLappingDiamond(i,rectCurrentDiamond)) {
+            let rectHorse=this.getBoundsDiamonds(this.horse);
+            while (this.isOverLappingDiamond(i,rectCurrentDiamond) ||
+            this.isRentangleOverLapping(rectHorse,rectCurrentDiamond)) {
                 diamond.x=juego.rnd.integerInRange(50,1050);
                 diamond.y=juego.rnd.integerInRange(50,600);
                 rectCurrentDiamond = this.getBoundsDiamonds(diamond);
