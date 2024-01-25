@@ -63,6 +63,22 @@ const funtions={
        };   
        this.scoreText=juego.add.text(juego.width/2,40,'0',style); 
        this.scoreText.anchor.setTo(0.5); 
+       this.totalTime=30;
+       this.timerText=juego.add.text(1000,40,`Tiempo: ${this.totalTime}`,style); 
+       this.timerText.anchor.setTo(0.5); 
+       this.timerGameOver=juego.time.events.loop(Phaser.Timer.SECOND,function () {
+        if (this.flagFirstMouseDown) {
+            
+            this.totalTime--;
+            this.timerText.text=`Tiempo: ${this.totalTime}`;
+            if (this.totalTime<=0) {
+                juego.time.events.remove(this.timerGameOver);
+                this.endGame=true;
+                this.showFinalMessage("Game over");
+            }
+        }
+       },this)
+       
     },
     increaseScore:function () {
         this.currentscore+=100;
@@ -71,6 +87,7 @@ const funtions={
         if (this.amountDiamondsCaught>=AMOUNT_DIAMONDS) {
             this.endGame=true;
             this.showFinalMessage("¡felicidades ganaste!");
+            juego.time.events.remove(this.timerGameOver);
         }
     },
     showFinalMessage:function (msg) {
