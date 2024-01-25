@@ -105,9 +105,9 @@ const funtions={
     },
     //para ver el rectangulo de la imagen
     render:function () {
-        juego.debug.spriteBounds(this.horse);
+        // juego.debug.spriteBounds(this.horse);
         for (let i = 0; i < AMOUNT_DIAMONDS; i++) {
-            juego.debug.spriteBounds(this.diamonds[i]);
+            // juego.debug.spriteBounds(this.diamonds[i]);
       
             
         }
@@ -138,8 +138,8 @@ const funtions={
     for (let i = 0; i < AMOUNT_DIAMONDS; i++) {
         let rectHorse=this.getBoundsHorse();
         let rectDiamond=this.getBoundsDiamonds(this.diamonds[i]);
-        if (this.isRentangleOverLapping(rectHorse,rectDiamond)) {
-            console.log("colisionan");
+        if (this.diamonds[i].visible && this.isRentangleOverLapping(rectHorse,rectDiamond)) {
+            this.diamonds[i].visible=false;
         }
         
     }
