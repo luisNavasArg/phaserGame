@@ -13,9 +13,19 @@ const funtions={
         juego.load.spritesheet("im", "src/assets/images/horse.png",84,156,2)
         juego.load.spritesheet('diamonds',"src/assets/images/diamonds.png",81,84,4);
         juego.load.image('explosion',"src/assets/images/explosion.png");
+        juego.load.image('shark',"src/assets/images/shark.png");
+        juego.load.image('fishes',"src/assets/images/fishes.png");
+        juego.load.image('mollusk',"src/assets/images/mollusk.png");
+
     },
     create:function () {
+        
         juego.add.sprite(0,0, 'background');
+        this.mollusk=juego.add.sprite(500,150,'mollusk');
+        this.shark=juego.add.sprite(500,20,'shark');
+        this.fishes=juego.add.sprite(100,550,'fishes');
+        
+
         this.horse =juego.add.sprite(0,0, 'im');
         this.horse.frame=1;
         this.horse.x=juego.width/2;
@@ -91,6 +101,7 @@ const funtions={
         }
     },
     showFinalMessage:function (msg) {
+        this.tweenMollusk.stop();
         let bgAlpha=juego.add.bitmapData(juego.width,juego.height);
         bgAlpha.ctx.fillStyle='#000';
         bgAlpha.ctx.fillRect(0,0,juego.width,juego.height);
@@ -106,6 +117,14 @@ const funtions={
         this.textFinalMessage.anchor.setTo(0.5);
     },
     onTap:function () {
+        if (!this.flagFirstMouseDown) {
+            this.tweenMollusk= juego.add.tween(this.mollusk.position).to({
+                y:-0.001
+            },
+            5822,
+            Phaser.Easing.Cubic.InOut,true,0,100,
+            true).loop(true);
+        }
         this.flagFirstMouseDown=true;
     },
     getBoundsDiamonds:function (currentDiamond) {
@@ -146,7 +165,15 @@ const funtions={
     let pointerY=juego.input.y;
 
     if (this.flagFirstMouseDown && !this.endGame) {
-  
+        this.shark.x--;
+        this.fishes.x++;
+        if (this.shark.x<-300) {
+            this.shark.x=1300;
+        }
+        if (this.fishes.x>1300) {
+            this.fishes.x=-300;
+        }
+
     let distX=pointerX-this.horse.x;
     let distY=pointerY-this.horse.y;
     if(distX>0){
