@@ -60,29 +60,25 @@ const funtions={
                 rectCurrentDiamond = this.getBoundsDiamonds(diamond);
             }
         }
-        //colocando en pantalla la explosion
-        // juego.add.sprite(100,100,'explosion');
 
-        //uso de tween permite animar una imagen le pasamos coordenadas,tiempo y el modo(easing)
-        this.explosion=juego.add.sprite(100,100,'explosion');
-        
-        /*let tween = juego.add.tween(this.explosion);
-        tween.to({x:500,y:100},1500,Phaser.Easing.Linear.None);
-        tween.start();*/
-        //le agregamos el tween a la instancia de explosion
+        this.explosionGroup = juego.add.group();
+       for (let i = 0; i < 10; i++) {
+        this.explosion=this.explosionGroup.create(100,100,'explosion');
         this.explosion.tweenScale= juego.add.tween(this.explosion.scale).to(
             {x:[0.4,0.8,0.4], y:[0.4,0.8,0.4]},600, Phaser.Easing.Exponential.Out,
-            //autostart, delay,repeticiones, si queremos usar el yoyo que vaya y vuelva constantemente
-            false      ,0     ,0           ,false
+             false,0,0,false
         );
         this.explosion.tweenAlpha= juego.add.tween(this.explosion).to(
             {alpha:[1,0.6,0]},600, Phaser.Easing.Exponential.Out,
             false,0,0,false
         );
-        //agregamos el pivot de la explosión
         this.explosion.anchor.setTo(0.5,0.5);
-        //lo hacemos invisible al principio
-        this.explosion.visible=false;
+        //kill lo hace invisible y lo deja disponible
+        this.explosion.kill();
+        
+       } 
+       
+       
         
     },
     // creamos la función para el flag
@@ -165,12 +161,17 @@ const funtions={
         let rectDiamond=this.getBoundsDiamonds(this.diamonds[i]);
         if (this.diamonds[i].visible && this.isRentangleOverLapping(rectHorse,rectDiamond)) {
             this.diamonds[i].visible=false;
-            //mostramos la explosión
-            this.explosion.visible=true;
-            this.explosion.x=this.diamonds[i].x;
-            this.explosion.y=this.diamonds[i].y;
-            this.explosion.tweenScale.start();
-            this.explosion.tweenAlpha.start();
+            let explosionInt = this.explosionGroup.getFirstDead();
+            if (explosionInt!=null) {
+                explosionInt.reset(this.diamonds[i].x,this.diamonds[i].y);
+                explosionInt.tweenScale.start();
+                explosionInt.tweenAlpha.start();
+                //para poder usar de nuevo los tweens 
+                explosionInt.tweenAlpha.onComplete.add(function (currentTarget,currentTween) {
+                    currentTarget.kill();
+                },this);
+            }
+            
 
         }
         
