@@ -91,6 +91,27 @@ const funtions={
         }
         return false;
     },
+    //1.función para dtectar los bordes del personaje
+    getBoundsHorse:function () {
+        //inicial
+        // let x0=this.horse.x - Math.abs(this.horse.width)/2;
+        // let width=Math.abs(this.horse.width);
+        //mejorando la colisión visual
+        let x0=this.horse.x - Math.abs(this.horse.width)/4;
+        let width=Math.abs(this.horse.width)/2;
+        let y0=this.horse.y - this.horse.width/2;
+        let height=this.horse.height;
+        return new Phaser.Rectangle(x0,y0,width,height);
+    },
+    //para ver el rectangulo de la imagen
+    render:function () {
+        juego.debug.spriteBounds(this.horse);
+        for (let i = 0; i < AMOUNT_DIAMONDS; i++) {
+            juego.debug.spriteBounds(this.diamonds[i]);
+      
+            
+        }
+    },
     // es llamado frame a frame
     update:function () {
         // this.horse.angle+=1;
@@ -114,7 +135,14 @@ const funtions={
     this.horse.y+=distY*0.02;
         
     }
-  
+    for (let i = 0; i < AMOUNT_DIAMONDS; i++) {
+        let rectHorse=this.getBoundsHorse();
+        let rectDiamond=this.getBoundsDiamonds(this.diamonds[i]);
+        if (this.isRentangleOverLapping(rectHorse,rectDiamond)) {
+            console.log("colisionan");
+        }
+        
+    }
         
     }
 };
