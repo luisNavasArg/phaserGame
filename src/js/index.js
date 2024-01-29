@@ -1,4 +1,5 @@
 const AMOUNT_DIAMONDS=30;
+const AMOUNT_BOOBLES=30;
 const funtions={
     init:function () {
         juego.scale.scaleMode=Phaser.ScaleManager.SHOW_ALL;
@@ -7,6 +8,7 @@ const funtions={
         this.flagFirstMouseDown=false;
         this.amountDiamondsCaught=0;
         this.endGame=false;
+        this.countSmile=-1;
     },
     preload:function () {
         juego.load.image('background','src/assets/images/background.png')
@@ -16,11 +18,22 @@ const funtions={
         juego.load.image('shark',"src/assets/images/shark.png");
         juego.load.image('fishes',"src/assets/images/fishes.png");
         juego.load.image('mollusk',"src/assets/images/mollusk.png");
-
+        juego.load.image('booble1',"src/assets/images/booble1.png");
+        juego.load.image('booble2',"src/assets/images/booble2.png");
     },
     create:function () {
         
         juego.add.sprite(0,0, 'background');
+        this.boobleArray=[];
+        for (let i = 0; i < AMOUNT_BOOBLES; i++) {
+            let xBooble=juego.rnd.integerInRange(1,1140);
+            let yBooble=juego.rnd.integerInRange(600,950);
+            let booble = juego.add.sprite(xBooble,yBooble,'booble'+juego.rnd.integerInRange(1,2));
+            booble.vel=0.2+juego.rnd.frac()*2;
+            booble.alpha=0.9;
+            booble.scale.setTo(0.2+juego.rnd.frac());
+            this.boobleArray[i]=booble;
+        }
         this.mollusk=juego.add.sprite(500,150,'mollusk');
         this.shark=juego.add.sprite(500,20,'shark');
         this.fishes=juego.add.sprite(100,550,'fishes');
@@ -91,6 +104,8 @@ const funtions={
        
     },
     increaseScore:function () {
+        this.countSmile=0;
+        this.horse.frame=1;
         this.currentscore+=100;
         this.scoreText.text=this.currentscore;
         this.amountDiamondsCaught+=1;
@@ -160,11 +175,28 @@ const funtions={
         return new Phaser.Rectangle(x0,y0,width,height);
     },
     update:function () {
+    
 
     let pointerX=juego.input.x;
     let pointerY=juego.input.y;
 
     if (this.flagFirstMouseDown && !this.endGame) {
+        for (let a = 0; a < AMOUNT_BOOBLES; a++) {
+            let booble=this.boobleArray[a];
+            booble.y-= booble.vel;
+            if (booble.y<-50) {
+                booble.y=700;
+                booble.x=juego.rnd.integerInRange(1,1140);
+            }
+            
+        }
+        if (this.countSmile>=0) {
+            this.countSmile++;
+            if (this.countSmile>50) {
+                this.countSmile=-1;
+                this.horse.frame=0;
+            }
+        }
         this.shark.x--;
         this.fishes.x++;
         if (this.shark.x<-300) {
